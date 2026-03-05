@@ -16,6 +16,13 @@ import {
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/dialog";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Plus } from "lucide-react";
@@ -25,11 +32,18 @@ import { useRouter } from "next/navigation";
 
 interface LeaveRequest {
     id: string;
+    leaveType: string;
     startDate: string;
     endDate: string;
     status: string;
     reason: string;
 }
+
+const LEAVE_TYPE_LABELS: Record<string, string> = {
+    SICK_LEAVE: "Sick Leave",
+    CASUAL_LEAVE: "Casual Leave",
+    EARNED_LEAVE: "Earned Leave",
+};
 
 export default function LeavesPage() {
     const [requests, setRequests] = useState<LeaveRequest[]>([]);
@@ -39,6 +53,7 @@ export default function LeavesPage() {
     const router = useRouter();
 
     const [formData, setFormData] = useState({
+        leaveType: "CASUAL_LEAVE",
         startDate: "",
         endDate: "",
         reason: "",
@@ -76,7 +91,7 @@ export default function LeavesPage() {
 
             toast.success("Leave request submitted successfully");
             setIsFormOpen(false);
-            setFormData({ startDate: "", endDate: "", reason: "" });
+            setFormData({ leaveType: "CASUAL_LEAVE", startDate: "", endDate: "", reason: "" });
             fetchLeaves();
             router.refresh();
         } catch (error) {
@@ -99,6 +114,7 @@ export default function LeavesPage() {
                 <Table>
                     <TableHeader>
                         <TableRow>
+                            <TableHead>Leave Type</TableHead>
                             <TableHead>Start Date</TableHead>
                             <TableHead>End Date</TableHead>
                             <TableHead>Reason</TableHead>
@@ -108,19 +124,24 @@ export default function LeavesPage() {
                     <TableBody>
                         {isLoading ? (
                             <TableRow>
-                                <TableCell colSpan={4} className="h-24 text-center">
+                                <TableCell colSpan={5} className="h-24 text-center">
                                     Loading...
                                 </TableCell>
                             </TableRow>
                         ) : requests.length === 0 ? (
                             <TableRow>
-                                <TableCell colSpan={4} className="h-24 text-center text-muted-foreground">
+                                <TableCell colSpan={5} className="h-24 text-center text-muted-foreground">
                                     No leave requests found.
                                 </TableCell>
                             </TableRow>
                         ) : (
                             requests.map((request) => (
                                 <TableRow key={request.id}>
+                                    <TableCell>
+                                        <span className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold bg-blue-100 text-blue-800">
+                                            {LEAVE_TYPE_LABELS[request.leaveType] || request.leaveType}
+                                        </span>
+                                    </TableCell>
                                     <TableCell>{format(new Date(request.startDate), "MMM dd, yyyy")}</TableCell>
                                     <TableCell>{format(new Date(request.endDate), "MMM dd, yyyy")}</TableCell>
                                     <TableCell className="max-w-[200px] truncate" title={request.reason}>
@@ -128,8 +149,8 @@ export default function LeavesPage() {
                                     </TableCell>
                                     <TableCell>
                                         <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold ${request.status === 'APPROVED' ? 'bg-green-100 text-green-800' :
-                                                request.status === 'REJECTED' ? 'bg-red-100 text-red-800' :
-                                                    'bg-yellow-100 text-yellow-800'
+                                            request.status === 'REJECTED' ? 'bg-red-100 text-red-800' :
+                                                'bg-yellow-100 text-yellow-800'
                                             }`}>
                                             {request.status}
                                         </span>
@@ -147,6 +168,22 @@ export default function LeavesPage() {
                         <DialogTitle>Request Leave</DialogTitle>
                     </DialogHeader>
                     <form onSubmit={handleSubmit} className="space-y-4">
+                        <div className="space-y-2">
+                            <Label>Leave Type</Label>
+                            <Select
+                                value={formData.leaveType}
+                                onValueChange={(value) => setFormData({ ...formData, leaveType: value })}
+                            >
+                                <SelectTrigger>
+                                    <SelectValue placeholder="Select leave type" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="SICK_LEAVE">Sick Leave</SelectItem>
+                                    <SelectItem value="CASUAL_LEAVE">Casual Leave</SelectItem>
+                                    <SelectItem value="EARNED_LEAVE">Earned Leave</SelectItem>
+                                </SelectContent>
+                            </Select>
+                        </div>
                         <div className="space-y-2">
                             <Label htmlFor="startDate">Start Date</Label>
                             <Input

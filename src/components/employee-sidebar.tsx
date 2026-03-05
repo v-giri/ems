@@ -10,6 +10,7 @@ import {
     CalendarDays,
     CheckSquare,
     Banknote,
+    UserCircle,
     LogOut,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -20,6 +21,7 @@ const navigation = [
     { name: "Leave Requests", href: "/employee/leaves", icon: CalendarDays },
     { name: "Tasks", href: "/employee/tasks", icon: CheckSquare },
     { name: "Payroll", href: "/employee/payroll", icon: Banknote },
+    { name: "My Profile", href: "/employee/profile", icon: UserCircle },
 ];
 
 export function EmployeeSidebar() {

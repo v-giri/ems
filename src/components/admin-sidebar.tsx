@@ -11,6 +11,7 @@ import {
     CheckSquare,
     Banknote,
     FileText,
+    UserCircle,
     LogOut,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -22,6 +23,7 @@ const navigation = [
     { name: "Tasks", href: "/admin/tasks", icon: CheckSquare },
     { name: "Payroll", href: "/admin/payroll", icon: Banknote },
     { name: "Documents", href: "/admin/documents", icon: FileText },
+    { name: "My Profile", href: "/admin/profile", icon: UserCircle },
 ];
 
 export function AdminSidebar() {

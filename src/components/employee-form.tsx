@@ -24,6 +24,7 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
 const employeeSchema = z.object({
+    employeeId: z.string().min(1, "Employee ID is required"),
     name: z.string().min(2, "Name must be at least 2 characters"),
     email: z.string().email("Invalid email address"),
     password: z.string().min(6, "Password must be at least 6 characters").optional().or(z.literal('')),
@@ -36,6 +37,7 @@ type EmployeeFormValues = z.infer<typeof employeeSchema>;
 interface EmployeeFormProps {
     employee?: {
         id: string;
+        employeeId: string | null;
         name: string | null;
         email: string | null;
         department: string | null;
@@ -54,9 +56,10 @@ export function EmployeeForm({ employee, open, onOpenChange, onSuccess }: Employ
     const form = useForm<EmployeeFormValues>({
         resolver: zodResolver(employeeSchema),
         defaultValues: {
+            employeeId: employee?.employeeId || "",
             name: employee?.name || "",
             email: employee?.email || "",
-            password: "", // Always empty initially, even when editing
+            password: "",
             department: employee?.department || "",
             salary: employee?.salary !== null && employee?.salary !== undefined ? String(employee.salary) : "",
         },
@@ -111,6 +114,19 @@ export function EmployeeForm({ employee, open, onOpenChange, onSuccess }: Employ
                 </DialogHeader>
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                        <FormField
+                            control={form.control}
+                            name="employeeId"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Employee ID</FormLabel>
+                                    <FormControl>
+                                        <Input placeholder="EMP-001" {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
                         <FormField
                             control={form.control}
                             name="name"
@@ -170,7 +186,7 @@ export function EmployeeForm({ employee, open, onOpenChange, onSuccess }: Employ
                             name="salary"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Salary</FormLabel>
+                                    <FormLabel>Salary (₹)</FormLabel>
                                     <FormControl>
                                         <Input type="number" placeholder="50000" {...field} />
                                     </FormControl>

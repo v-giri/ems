@@ -16,10 +16,11 @@ export async function PUT(
 
     try {
         const body = await req.json();
-        const { name, email, password, department, salary } = body;
+        const { name, email, password, department, salary, employeeId } = body;
         const { id } = await params;
 
         const dataToUpdate: any = {
+            employeeId,
             name,
             email,
             department,

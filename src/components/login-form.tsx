@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -69,10 +70,13 @@ export function LoginForm() {
                     </div>
                     {error && <div className="text-sm text-red-500">{error}</div>}
                 </CardContent>
-                <CardFooter>
+                <CardFooter className="flex flex-col gap-3">
                     <Button className="w-full" type="submit" disabled={isLoading}>
                         {isLoading ? "Signing in..." : "Sign in"}
                     </Button>
+                    <Link href="/login/forgot-password" className="text-sm text-primary hover:underline">
+                        Forgot Password?
+                    </Link>
                 </CardFooter>
             </form>
         </Card>

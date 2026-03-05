@@ -17,10 +17,12 @@ import { useRouter } from "next/navigation";
 
 interface Employee {
     id: string;
+    employeeId: string | null;
     name: string | null;
     email: string | null;
     department: string | null;
     salary: number | null;
+    cvUrl: string | null;
 }
 
 export default function EmployeesPage() {
@@ -88,33 +90,43 @@ export default function EmployeesPage() {
                 <Table>
                     <TableHeader>
                         <TableRow>
+                            <TableHead>Emp ID</TableHead>
                             <TableHead>Name</TableHead>
                             <TableHead>Email</TableHead>
                             <TableHead>Department</TableHead>
                             <TableHead>Salary</TableHead>
+                            <TableHead>CV</TableHead>
                             <TableHead className="text-right">Actions</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
                         {isLoading ? (
                             <TableRow>
-                                <TableCell colSpan={5} className="h-24 text-center">
+                                <TableCell colSpan={7} className="h-24 text-center">
                                     Loading...
                                 </TableCell>
                             </TableRow>
                         ) : employees.length === 0 ? (
                             <TableRow>
-                                <TableCell colSpan={5} className="h-24 text-center text-muted-foreground">
+                                <TableCell colSpan={7} className="h-24 text-center text-muted-foreground">
                                     No employees found.
                                 </TableCell>
                             </TableRow>
                         ) : (
                             employees.map((employee) => (
                                 <TableRow key={employee.id}>
+                                    <TableCell className="font-mono text-xs">{employee.employeeId || "—"}</TableCell>
                                     <TableCell className="font-medium">{employee.name || "N/A"}</TableCell>
                                     <TableCell>{employee.email}</TableCell>
                                     <TableCell>{employee.department || "N/A"}</TableCell>
-                                    <TableCell>${employee.salary?.toLocaleString() || "N/A"}</TableCell>
+                                    <TableCell>₹{employee.salary?.toLocaleString('en-IN') || "N/A"}</TableCell>
+                                    <TableCell>
+                                        {employee.cvUrl ? (
+                                            <a href={employee.cvUrl} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline text-sm">View CV</a>
+                                        ) : (
+                                            <span className="text-muted-foreground text-sm">—</span>
+                                        )}
+                                    </TableCell>
                                     <TableCell className="text-right">
                                         <Button
                                             variant="ghost"

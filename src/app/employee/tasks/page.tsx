@@ -67,7 +67,14 @@ export default function TasksPage() {
 
     return (
         <div className="space-y-6">
-            <h1 className="text-3xl font-bold tracking-tight">My Tasks</h1>
+            <div className="flex items-center gap-3">
+                <h1 className="text-3xl font-bold tracking-tight">My Tasks</h1>
+                {tasks.length > 0 && (
+                    <span className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold bg-yellow-100 text-yellow-800">
+                        {tasks.filter(t => t.status !== "DONE").length} Pending
+                    </span>
+                )}
+            </div>
 
             <div className="rounded-md border bg-background">
                 <Table>

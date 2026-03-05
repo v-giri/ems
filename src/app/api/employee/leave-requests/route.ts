@@ -38,11 +38,12 @@ export async function POST(req: Request) {
     }
 
     try {
-        const { startDate, endDate, reason } = await req.json();
+        const { startDate, endDate, reason, leaveType } = await req.json();
 
         const leaveRequest = await prisma.leaveRequest.create({
             data: {
                 userId: session.user.id,
+                leaveType: leaveType || "CASUAL_LEAVE",
                 startDate: new Date(startDate),
                 endDate: new Date(endDate),
                 reason,

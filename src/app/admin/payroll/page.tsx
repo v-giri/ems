@@ -178,7 +178,7 @@ export default function AdminPayrollPage() {
                                         <div className="text-xs text-muted-foreground">{record.user.department}</div>
                                     </TableCell>
                                     <TableCell>{record.payPeriod}</TableCell>
-                                    <TableCell>${Number(record.netAmount).toLocaleString()}</TableCell>
+                                    <TableCell>₹{Number(record.netAmount).toLocaleString('en-IN')}</TableCell>
                                     <TableCell>
                                         {record.isPaid ? (
                                             <span className="inline-flex items-center text-sm font-medium text-green-600">
@@ -243,7 +243,7 @@ export default function AdminPayrollPage() {
                             />
                         </div>
                         <div className="space-y-2">
-                            <Label htmlFor="netAmount">Net Amount ($)</Label>
+                            <Label htmlFor="netAmount">Net Amount (₹)</Label>
                             <Input
                                 id="netAmount"
                                 type="number"

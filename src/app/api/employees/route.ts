@@ -18,10 +18,13 @@ export async function GET() {
             },
             select: {
                 id: true,
+                employeeId: true,
                 name: true,
                 email: true,
+                role: true,
                 department: true,
                 salary: true,
+                cvUrl: true,
                 createdAt: true,
             },
             orderBy: {
@@ -48,7 +51,7 @@ export async function POST(req: Request) {
 
     try {
         const body = await req.json();
-        const { name, email, password, department, salary } = body;
+        const { name, email, password, department, salary, employeeId } = body;
 
         // Check if user already exists
         const existingUser = await prisma.user.findUnique({
@@ -66,6 +69,7 @@ export async function POST(req: Request) {
 
         const newEmployee = await prisma.user.create({
             data: {
+                employeeId,
                 name,
                 email,
                 password: hashedPassword,
@@ -75,6 +79,7 @@ export async function POST(req: Request) {
             },
             select: {
                 id: true,
+                employeeId: true,
                 name: true,
                 email: true,
                 department: true,

@@ -131,7 +131,14 @@ export default function AdminTasksPage() {
     return (
         <div className="space-y-6">
             <div className="flex items-center justify-between">
-                <h1 className="text-3xl font-bold tracking-tight">Manage Tasks</h1>
+                <div className="flex items-center gap-3">
+                    <h1 className="text-3xl font-bold tracking-tight">Manage Tasks</h1>
+                    {tasks.length > 0 && (
+                        <span className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold bg-yellow-100 text-yellow-800">
+                            {tasks.filter(t => t.status !== "DONE").length} Pending
+                        </span>
+                    )}
+                </div>
                 <Button onClick={() => setIsFormOpen(true)}>
                     <Plus className="mr-2 h-4 w-4" /> Assign Task
                 </Button>
@@ -172,7 +179,12 @@ export default function AdminTasksPage() {
                                         {task.dueDate ? format(new Date(task.dueDate), "MMM dd, yyyy") : "-"}
                                     </TableCell>
                                     <TableCell>
-                                        <span className="text-sm border px-2 py-1 rounded-md">{task.status.replace("_", " ")}</span>
+                                        <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold ${task.status === 'DONE' ? 'bg-green-100 text-green-800' :
+                                                task.status === 'IN_PROGRESS' ? 'bg-blue-100 text-blue-800' :
+                                                    'bg-yellow-100 text-yellow-800'
+                                            }`}>
+                                            {task.status === "IN_PROGRESS" ? "In Progress" : task.status === "TODO" ? "To Do" : "Done"}
+                                        </span>
                                     </TableCell>
                                     <TableCell className="text-right">
                                         <Button

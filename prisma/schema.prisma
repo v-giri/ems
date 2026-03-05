@@ -30,9 +30,16 @@ enum TaskStatus {
   DONE
 }
 
+enum LeaveType {
+  SICK_LEAVE
+  CASUAL_LEAVE
+  EARNED_LEAVE
+}
+
 // Models
 model User {
   id            String    @id @default(cuid())
+  employeeId    String?   // e.g., "EMP-001"
   name          String?
   email         String?   @unique
   emailVerified DateTime?
@@ -41,6 +48,7 @@ model User {
   role          Role      @default(EMPLOYEE)
   department    String?
   salary        Float?
+  cvUrl         String?
 
   // Relations
   attendances   Attendance[]
@@ -76,6 +84,7 @@ model LeaveRequest {
   id        String      @id @default(cuid())
   userId    String
   user      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  leaveType LeaveType   @default(CASUAL_LEAVE)
   startDate DateTime
   endDate   DateTime
   status    LeaveStatus @default(PENDING)

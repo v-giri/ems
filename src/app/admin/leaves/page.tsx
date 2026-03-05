@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button";
 
 interface LeaveRequest {
     id: string;
+    leaveType: string;
     startDate: string;
     endDate: string;
     status: string;
@@ -24,6 +25,12 @@ interface LeaveRequest {
         email: string | null;
     };
 }
+
+const LEAVE_TYPE_LABELS: Record<string, string> = {
+    SICK_LEAVE: "Sick Leave",
+    CASUAL_LEAVE: "Casual Leave",
+    EARNED_LEAVE: "Earned Leave",
+};
 
 export default function AdminLeavesPage() {
     const [requests, setRequests] = useState<LeaveRequest[]>([]);
@@ -72,6 +79,7 @@ export default function AdminLeavesPage() {
                     <TableHeader>
                         <TableRow>
                             <TableHead>Employee</TableHead>
+                            <TableHead>Leave Type</TableHead>
                             <TableHead>Start Date</TableHead>
                             <TableHead>End Date</TableHead>
                             <TableHead>Reason</TableHead>
@@ -82,13 +90,13 @@ export default function AdminLeavesPage() {
                     <TableBody>
                         {isLoading ? (
                             <TableRow>
-                                <TableCell colSpan={6} className="h-24 text-center">
+                                <TableCell colSpan={7} className="h-24 text-center">
                                     Loading...
                                 </TableCell>
                             </TableRow>
                         ) : requests.length === 0 ? (
                             <TableRow>
-                                <TableCell colSpan={6} className="h-24 text-center text-muted-foreground">
+                                <TableCell colSpan={7} className="h-24 text-center text-muted-foreground">
                                     No leave requests found.
                                 </TableCell>
                             </TableRow>
@@ -98,6 +106,11 @@ export default function AdminLeavesPage() {
                                     <TableCell className="font-medium">
                                         {request.user.name || request.user.email}
                                     </TableCell>
+                                    <TableCell>
+                                        <span className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold bg-blue-100 text-blue-800">
+                                            {LEAVE_TYPE_LABELS[request.leaveType] || request.leaveType}
+                                        </span>
+                                    </TableCell>
                                     <TableCell>{format(new Date(request.startDate), "MMM dd, yyyy")}</TableCell>
                                     <TableCell>{format(new Date(request.endDate), "MMM dd, yyyy")}</TableCell>
                                     <TableCell className="max-w-[200px] truncate" title={request.reason}>
@@ -105,8 +118,8 @@ export default function AdminLeavesPage() {
                                     </TableCell>
                                     <TableCell>
                                         <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold ${request.status === 'APPROVED' ? 'bg-green-100 text-green-800' :
-                                                request.status === 'REJECTED' ? 'bg-red-100 text-red-800' :
-                                                    'bg-yellow-100 text-yellow-800'
+                                            request.status === 'REJECTED' ? 'bg-red-100 text-red-800' :
+                                                'bg-yellow-100 text-yellow-800'
                                             }`}>
                                             {request.status}
                                         </span>

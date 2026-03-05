@@ -76,7 +76,7 @@ export default function PayrollPage() {
                                 <TableRow key={payroll.id}>
                                     <TableCell className="font-medium">{payroll.payPeriod}</TableCell>
                                     <TableCell>{format(new Date(payroll.createdAt), "MMM dd, yyyy")}</TableCell>
-                                    <TableCell>${payroll.netAmount.toLocaleString()}</TableCell>
+                                    <TableCell>₹{payroll.netAmount.toLocaleString('en-IN')}</TableCell>
                                     <TableCell>
                                         {payroll.isPaid ? (
                                             <span className="inline-flex items-center text-sm font-medium text-green-600">
